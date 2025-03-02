@@ -19,6 +19,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Facades\Filament;
 
 class AdminPanelPanelProvider extends PanelProvider
 {
@@ -58,5 +59,19 @@ class AdminPanelPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+    }
+
+    public function boot(): void
+    {
+        // Register Vite-built assets dynamically
+        Filament::serving(function () {
+            Filament::registerScripts([
+                asset('dist/assets/app.js'),
+            ]);
+
+            Filament::registerStyles([
+                asset('dist/assets/app.css'),
+            ]);
+        });
     }
 }
